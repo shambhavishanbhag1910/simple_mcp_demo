@@ -1,0 +1,13 @@
+# Python environment files
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+
+# IDE settings
+.vscode/
+.idea/
+
+# Local configuration backups
+*config.json

@@ -32,9 +32,68 @@ Rather than allowing an LLM to guess calculations or work in isolation, this arc
 ├── README.md               # Architecture documentation
 └── server.py               # Active MCP Server logic and tool schemas
 ```
+## System Architecture
+
+```text
+┌──────────────────────────┐
+│      Claude Desktop      │
+│         MCP Host         │
+└────────────┬─────────────┘
+             │
+             │ stdio
+             ▼
+┌──────────────────────────┐
+│       FastMCP Server     │
+│         server.py        │
+├──────────────────────────┤
+│                          │
+│ Resource                 │
+│ └── system://info        │
+│                          │
+│ Tools                    │
+│ ├── analyze_text_        │
+│ │   complexity()         │
+│ └── safe_divide_         │
+│     numbers()            │
+│                          │
+└────────────┬─────────────┘
+             │
+             ▼
+┌──────────────────────────┐
+│ Local Python Execution   │
+│ Conda / Python Runtime   │
+└──────────────────────────┘
+```
 
 ## Activate your specific virtual environment
 conda activate mcp
 
-# Install required dependencies
+## Install required dependencies
 pip install fastmcp
+
+## Claude Desktop Configuration
+
+The MCP host must know how to start the local server.
+
+A sanitized Windows configuration example is shown below.
+
+> Replace the example path with the actual absolute path to your local `server.py`.
+
+```json
+{
+  "mcpServers": {
+    "simple-mcp-demo": {
+      "command": "cmd.exe",
+      "args": [
+        "/c",
+        "conda",
+        "run",
+        "-n",
+        "mcp",
+        "python",
+        "C:\\path\\to\\simple_mcp_demo\\server.py"
+      ]
+    }
+  }
+}
+```
